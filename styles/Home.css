@@ -55,6 +55,26 @@
   margin: 0 var(--spacing-sm);
 }
 
+/* Product Cards */
+.section .card h3 {
+  font-size: 1rem;
+  margin-bottom: var(--spacing-xs);
+}
+
+.section .card .price {
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.section .card .product-rating {
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.section .card .product-rating span:first-child {
+  font-size: 0.9rem;
+}
+
 /* Featured Section */
 #featured {
   background: var(--off-white);
@@ -115,6 +135,15 @@
     margin: var(--spacing-sm) auto;
     width: 200px;
   }
+
+  /* Smaller font for mobile product cards */
+  .section .card h3 {
+    font-size: 0.95rem;
+  }
+
+  .section .card .price {
+    font-size: 1rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -129,5 +158,18 @@
   .hero img {
     width: 60px;
     height: 60px;
+  }
+
+  /* Even smaller font for small mobile */
+  .section .card h3 {
+    font-size: 0.9rem;
+  }
+
+  .section .card .price {
+    font-size: 0.95rem;
+  }
+
+  .section .card .product-rating {
+    font-size: 0.85rem;
   }
 }

@@ -5,6 +5,7 @@ import { CartProvider } from './contexts/CartContext';
 
 // Import global CSS
 import './styles/global.css';
+import './styles/Toast.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

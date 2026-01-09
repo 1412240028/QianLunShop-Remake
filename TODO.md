@@ -1,63 +1,14 @@
-# QianLun Shop - Production Ready Development Plan
+# TODO: Ensure Toast.css works for all pages
 
-## Phase 1: Critical Fixes & Core Infrastructure (Priority: High) ✅ COMPLETED
-- [x] Fix navigation: Replace <a href> with <Link> components
-- [x] Implement global cart state with Context API
-- [x] Fix product filtering logic in Products page
-- [x] Add missing dependencies to package.json
-- [x] Create proper project structure and configuration
-
-## Phase 2: Styling & UI Enhancement (Priority: High) - IN PROGRESS
-- [x] Add CSS classes to Home page sections
-- [x] Add CSS classes to Products page with filtering and sorting
-- [x] Add CSS classes to Contact page
-- [ ] Add CSS classes to other pages (About, ProductDetail)
-- [ ] Implement responsive design for all pages
-- [ ] Create consistent design system (colors, typography, spacing)
-- [ ] Add loading states and animations
-- [ ] Optimize mobile experience
-
-## Phase 3: Core Features Implementation (Priority: High)
-- [ ] Implement functional newsletter signup
-- [ ] Add contact form submission handling
-- [ ] Create product data management
-- [ ] Add image assets or placeholder service
-- [ ] Implement search functionality
-
-## Phase 4: Advanced Features (Priority: Medium)
-- [ ] Add wishlist functionality
-- [ ] Implement user authentication (optional)
-- [ ] Add product reviews and ratings
-- [ ] Create order history (placeholder)
-- [ ] Add social sharing
-
-## Phase 5: Production Preparation (Priority: High)
-- [ ] Add error boundaries and error handling
-- [ ] Implement SEO optimization (meta tags, titles)
-- [ ] Add performance optimizations
-- [ ] Create build configuration
-- [ ] Add environment variables setup
-
-## Phase 6: Testing & Deployment (Priority: High)
-- [ ] Test all functionality across devices
-- [ ] Fix any bugs found during testing
-- [ ] Optimize for production build
-- [ ] Create deployment documentation
-- [ ] Final QA and launch preparation
-
-## Files to be Modified/Created:
-- package.json (add dependencies)
-- All component files (add CSS classes, fix navigation)
-- src/index.css (enhance styling)
-- New: contexts/CartContext.jsx
-- New: components/ProductCard.jsx
-- New: components/LoadingSpinner.jsx
-- New: utils/constants.js
-- New: assets/ (for images)
-
-## Dependencies to Add:
-- @types/react (if using TypeScript)
-- react-icons (for icons)
-- axios (for API calls)
-- react-helmet-async (for SEO)
-- react-router-dom (already present)
+- [x] Import '../styles/Toast.css' in main.jsx to make it globally available
+- [x] Add toast notification to Products.jsx handleAddToCart
+- [x] Remove redundant import of Toast.css from ProductDetail.jsx
+- [x] Add toast notification to Cart.jsx removeFromCart and clearCart
+- [x] Make cart-item styling smaller in Cart.css (reduce padding, gap, image size, font size)
+- [x] Change font color of "Browse Products" link in Cart.css to var(--primary-black)
+- [x] Make cart-item even smaller (reduce padding to var(--spacing-sm), gap to var(--spacing-xs), image to 50px, font to 0.85rem)
+- [x] Adjust cart-item grid layout to prevent overlapping (change to 1fr 0.8fr 0.8fr 0.8fr 0.5fr)
+- [x] Reduce font sizes for product name (0.85rem), price (0.9rem), and subtotal (1rem) in cart-item
+- [x] Make cart-item even smaller: grid to 1fr 0.7fr 0.7fr 0.7fr 0.4fr, padding to var(--spacing-xs), image to 40px
+- [x] Remove text from payment methods in Cart.jsx, leave only emojis
+- [x] Verify that toast notifications work in Products, ProductDetail, and Cart pages (app running on localhost:5175)

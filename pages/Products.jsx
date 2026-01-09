@@ -57,7 +57,7 @@ function Products() {
       name: 'PRESTIGE TIMEPIECE',
       category: 'watch',
       price: 15000000,
-      image: '/assets/images/products/watch.png',
+      image: '/assets/images/products/watch2.png',
       badge: 'EXCLUSIVE',
       rating: 5,
       reviews: 98
@@ -130,6 +130,14 @@ function Products() {
       image: product.image,
       quantity: 1
     });
+
+    // Simple toast notification
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.textContent = `${product.name} added to cart!`;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.remove(), 3000);
   };
 
   return (

@@ -1,0 +1,28 @@
+/* ===== TOAST NOTIFICATIONS ===== */
+
+.toast-notification {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--gold);
+  color: var(--primary-black);
+  padding: 16px 24px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-weight: 600;
+  font-family: var(--font-secondary);
+  z-index: 9999;
+  animation: slideInUp 0.3s ease-out;
+  border: 2px solid var(--gold-dark);
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

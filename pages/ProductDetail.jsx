@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useCart } from '../contexts/CartContext';
 import '../styles/ProductDetail.css';
 
 function ProductDetail() {
@@ -7,6 +8,7 @@ function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [activeTab, setActiveTab] = useState('description');
+  const { addToCart } = useCart();
 
   // Sample product data
   const products = [
@@ -124,6 +126,43 @@ function ProductDetail() {
         dimensions: '10x7 cm',
         weight: '100g'
       }
+    },
+    {
+      id: 5,
+      name: 'PRESTIGE TIMEPIECE',
+      category: 'watch',
+      price: 15000000,
+      badge: 'EXCLUSIVE',
+      rating: 5,
+      reviews: 98,
+      description: 'The Prestige Timepiece represents the ultimate fusion of traditional craftsmanship and modern precision. This masterpiece features a Swiss quartz movement housed in a dragon-engraved stainless steel case, complemented by a sapphire crystal glass and water-resistant construction. Each timepiece is individually numbered and comes with a premium leather strap, making it not just a watch, but a statement of sophistication and heritage.',
+      features: [
+        'Swiss quartz movement with precision accuracy',
+        'Sapphire crystal glass for scratch resistance',
+        'Dragon-engraved stainless steel case',
+        'Premium leather strap with gold buckle',
+        'Water-resistant to 50 meters',
+        'Limited edition with individual numbering',
+        '3-year international warranty',
+        'Includes luxury presentation box and papers'
+      ],
+      images: [
+        '/assets/images/products/watch2.png',
+        '/assets/images/products/watch2.png',
+        '/assets/images/products/watch2.png',
+        '/assets/images/products/watch2.png'
+      ],
+      specifications: {
+        material: 'Stainless Steel & Premium Leather',
+        movement: 'Swiss Quartz',
+        diameter: '40mm',
+        thickness: '11mm',
+        weight: '165g',
+        waterResistance: '50m',
+        crystal: 'Sapphire',
+        strap: 'Genuine Leather',
+        clasp: 'Gold-plated buckle'
+      }
     }
   ];
 
@@ -150,13 +189,13 @@ function ProductDetail() {
       reviews: 203
     },
     {
-      id: 5,
-      name: 'PRESTIGE TIMEPIECE',
+      id: 1,
+      name: 'APEX CHRONOGRAPH',
       category: 'watch',
-      price: 15000000,
+      price: 12500000,
       image: '/assets/images/products/watch.png',
       rating: 5,
-      reviews: 98
+      reviews: 127
     }
   ];
 
@@ -166,6 +205,25 @@ function ProductDetail() {
     } else if (type === 'decrease' && quantity > 1) {
       setQuantity(quantity - 1);
     }
+  };
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0],
+      category: product.category,
+      quantity: quantity
+    });
+
+    // Simple toast notification
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.textContent = `${product.name} added to cart!`;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.remove(), 3000);
   };
 
   if (!product) {
@@ -270,7 +328,12 @@ function ProductDetail() {
 
               {/* Action Buttons */}
               <div className="product-actions">
-                <button className="btn btn-primary">Add to Cart</button>
+                <button
+                  className="btn btn-primary"
+                  onClick={handleAddToCart}
+                >
+                  Add to Cart
+                </button>
                 <button className="btn btn-accent">Buy Now</button>
                 <button className="btn btn-secondary wishlist-btn">
                   ♡ Add to Wishlist
