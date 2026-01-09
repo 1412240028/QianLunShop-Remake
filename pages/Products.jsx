@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import '../styles/Products.css';
 
 function Products() {
   const [selectedCategory, setSelectedCategory] = useState('all');
