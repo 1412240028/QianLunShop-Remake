@@ -48,6 +48,9 @@ function Navbar() {
             <li>
               <Link to="/contact">Kontak</Link>
             </li>
+            <li>
+              <Link to="/settings">Settings</Link>
+            </li>
           </ul>
         </div>
 
@@ -94,6 +97,11 @@ function Navbar() {
             <li>
               <Link to="/contact" onClick={closeMobileMenu}>
                 Kontak
+              </Link>
+            </li>
+            <li>
+              <Link to="/settings" onClick={closeMobileMenu}>
+                Settings
               </Link>
             </li>
           </ul>

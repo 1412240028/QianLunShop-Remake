@@ -67,20 +67,28 @@ export const CartProvider = ({ children }) => {
 
   // Load cart from localStorage on mount
   useEffect(() => {
-    const savedCart = localStorage.getItem('qianlun-cart');
-    if (savedCart) {
-      try {
+    try {
+      const savedCart = localStorage.getItem('qianlun-cart');
+      if (savedCart) {
         const cartItems = JSON.parse(savedCart);
-        dispatch({ type: 'LOAD_CART', payload: cartItems });
-      } catch (error) {
-        console.error('Error loading cart from localStorage:', error);
+        if (Array.isArray(cartItems) && cartItems.length > 0) {
+          dispatch({ type: 'LOAD_CART', payload: cartItems });
+        }
       }
+    } catch (error) {
+      console.error('Error loading cart from localStorage:', error);
+      // Clear corrupted data
+      localStorage.removeItem('qianlun-cart');
     }
   }, []);
 
   // Save cart to localStorage whenever items change
   useEffect(() => {
-    localStorage.setItem('qianlun-cart', JSON.stringify(state.items));
+    try {
+      localStorage.setItem('qianlun-cart', JSON.stringify(state.items));
+    } catch (error) {
+      console.error('Error saving cart to localStorage:', error);
+    }
   }, [state.items]);
 
   // Cart actions
