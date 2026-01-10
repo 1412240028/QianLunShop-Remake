@@ -27,9 +27,10 @@
 }
 
 .hero img {
-  width: 80px;
-  height: 80px;
-  margin-bottom: var(--spacing-lg);
+  width: 100px;
+  height: 100px;
+  margin: 0 auto var(--spacing-lg);
+  display: block;
   filter: drop-shadow(0 4px 8px rgba(212, 175, 55, 0.3));
 }
 
@@ -120,6 +121,16 @@
 
 .section[style*="background: #f8f9fa"] .btn {
   padding: 12px 24px;
+}
+
+/* Section subtitles */
+.section-subtitle {
+  color: var(--primary-black);
+}
+
+/* Card content */
+.card-content {
+  color: var(--primary-black);
 }
 
 
