@@ -7,14 +7,21 @@ function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { getCartCount } = useCart();
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
         {/* Logo */}
         <div className="navbar-logo">
-          <Link to="/">
+          <Link to="/" onClick={closeMobileMenu}>
             <img src="/assets/images/logos/logo.png" alt="QianLun Logo" />
-            <span>QIANLUN</span>
           </Link>
         </div>
 
@@ -30,7 +37,9 @@ function Navbar() {
             <li>
               <Link to="/cart" className="cart-link">
                 Keranjang
-                <span className="cart-count">{getCartCount()}</span>
+                {getCartCount() > 0 && (
+                  <span className="cart-count">{getCartCount()}</span>
+                )}
               </Link>
             </li>
             <li>
@@ -44,8 +53,10 @@ function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
-          className="mobile-menu-btn"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className={`mobile-menu-btn ${isMobileMenuOpen ? 'open' : ''}`}
+          onClick={toggleMobileMenu}
+          aria-label="Toggle mobile menu"
+          aria-expanded={isMobileMenuOpen}
         >
           <span></span>
           <span></span>
@@ -55,25 +66,35 @@ function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="mobile-menu">
+        <div className="mobile-menu" style={{ display: 'block' }}>
           <ul>
             <li>
-              <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>Beranda</Link>
-            </li>
-            <li>
-              <Link to="/products" onClick={() => setIsMobileMenuOpen(false)}>Produk</Link>
-            </li>
-            <li>
-              <Link to="/cart" onClick={() => setIsMobileMenuOpen(false)} className="cart-link">
-                Keranjang
-                <span className="cart-count">{getCartCount()}</span>
+              <Link to="/" onClick={closeMobileMenu}>
+                Beranda
               </Link>
             </li>
             <li>
-              <Link to="/about" onClick={() => setIsMobileMenuOpen(false)}>Tentang</Link>
+              <Link to="/products" onClick={closeMobileMenu}>
+                Produk
+              </Link>
             </li>
             <li>
-              <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>Kontak</Link>
+              <Link to="/cart" onClick={closeMobileMenu} className="cart-link">
+                Keranjang
+                {getCartCount() > 0 && (
+                  <span className="cart-count">{getCartCount()}</span>
+                )}
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" onClick={closeMobileMenu}>
+                Tentang
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" onClick={closeMobileMenu}>
+                Kontak
+              </Link>
             </li>
           </ul>
         </div>

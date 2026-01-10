@@ -55,6 +55,12 @@
   margin: 0 var(--spacing-sm);
 }
 
+.hero .container > div:last-child {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
 /* Product Cards */
 .section .card h3 {
   font-size: 1rem;
@@ -116,60 +122,4 @@
   padding: 12px 24px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .hero {
-    padding: var(--spacing-xl) 0;
-  }
 
-  .hero h1 {
-    font-size: 2.5rem;
-  }
-
-  .hero p {
-    font-size: 1.1rem;
-  }
-
-  .hero .btn {
-    display: block;
-    margin: var(--spacing-sm) auto;
-    width: 200px;
-  }
-
-  /* Smaller font for mobile product cards */
-  .section .card h3 {
-    font-size: 0.95rem;
-  }
-
-  .section .card .price {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero h1 {
-    font-size: 2rem;
-  }
-
-  .hero p {
-    font-size: 1rem;
-  }
-
-  .hero img {
-    width: 60px;
-    height: 60px;
-  }
-
-  /* Even smaller font for small mobile */
-  .section .card h3 {
-    font-size: 0.9rem;
-  }
-
-  .section .card .price {
-    font-size: 0.95rem;
-  }
-
-  .section .card .product-rating {
-    font-size: 0.85rem;
-  }
-}

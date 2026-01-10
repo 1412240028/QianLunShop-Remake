@@ -8,6 +8,7 @@ function Products() {
   const [priceRange, setPriceRange] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('default');
+  const [isFilterCollapsed, setIsFilterCollapsed] = useState(true); // Collapsed by default on mobile
   const { addToCart } = useCart();
 
   // Product data
@@ -61,36 +62,6 @@ function Products() {
       badge: 'EXCLUSIVE',
       rating: 5,
       reviews: 98
-    },
-    {
-      id: 6,
-      name: 'HERITAGE BRIEFCASE',
-      category: 'bag',
-      price: 9500000,
-      image: '/assets/images/products/bag.png',
-      badge: '',
-      rating: 5,
-      reviews: 76
-    },
-    {
-      id: 7,
-      name: 'CLASSIC LOAFER',
-      category: 'shoes',
-      price: 5500000,
-      image: '/assets/images/products/shoes.png',
-      badge: '',
-      rating: 5,
-      reviews: 134
-    },
-    {
-      id: 8,
-      name: 'EXECUTIVE WALLET',
-      category: 'wallet',
-      price: 4200000,
-      image: '/assets/images/products/wallet.png',
-      badge: 'NEW',
-      rating: 5,
-      reviews: 167
     }
   ];
 
@@ -140,6 +111,10 @@ function Products() {
     setTimeout(() => toast.remove(), 3000);
   };
 
+  const toggleFilterCollapse = () => {
+    setIsFilterCollapsed(!isFilterCollapsed);
+  };
+
   return (
     <div className="page-wrapper">
       {/* Page Header */}
@@ -154,18 +129,27 @@ function Products() {
 
       <div className="products-container">
         {/* Sidebar Filter */}
-        <aside className="products-sidebar">
-          <h3>Filters</h3>
+        <aside className={`products-sidebar ${isFilterCollapsed ? 'collapsed' : ''}`}>
+          <h3 onClick={toggleFilterCollapse}>
+            Filters
+          </h3>
 
           {/* Search */}
-          <div className="form-group">
-            <label>Search</label>
+          <div className="filter-group">
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Search</label>
             <input
               type="text"
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="form-group"
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                border: '2px solid var(--gray-light)',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: '1rem',
+                minHeight: '48px'
+              }}
             />
           </div>
 
