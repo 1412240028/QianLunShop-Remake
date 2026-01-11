@@ -28,19 +28,10 @@
     height: 70px;
     padding: 0.75rem 0;
   }
-  
+
   .navbar-container {
     padding: 0 1rem;
   }
-}
-
-.navbar-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .navbar-logo {
@@ -72,8 +63,10 @@
 }
 
 /* Desktop Menu - VISIBLE on desktop */
-.navbar-menu {
-  display: block;
+@media (min-width: 769px) {
+  .navbar-menu {
+    display: block;
+  }
 }
 
 .navbar-menu ul {
@@ -97,6 +90,27 @@
 
 .navbar-menu a:hover {
   color: var(--gold);
+}
+
+.navbar-menu a.active {
+  color: var(--gold);
+  border-bottom: 2px solid var(--gold);
+}
+
+/* Scrolled navbar shrink effect - only on desktop */
+@media (min-width: 769px) {
+  .navbar--scrolled {
+    height: 60px;
+    padding: 0.5rem 0;
+  }
+
+  .navbar--scrolled .navbar-logo img {
+    height: 30px;
+  }
+
+  .navbar--scrolled .navbar-menu a {
+    font-size: 0.8rem;
+  }
 }
 
 .cart-link {
@@ -194,4 +208,67 @@
 
 .mobile-menu li:last-child a {
   border-bottom: none;
+}
+
+/* Bottom Navigation for Mobile */
+.bottom-nav {
+  display: none; /* Hidden by default, shown on mobile */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--primary-black);
+  border-top: 2px solid var(--gold);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  height: 80px;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: var(--off-white);
+  font-size: 0.75rem;
+  font-family: var(--font-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+  position: relative;
+  min-height: 60px;
+  justify-content: center;
+  gap: 4px;
+}
+
+.bottom-nav-item:hover,
+.bottom-nav-item:active,
+.bottom-nav-item.active {
+  color: var(--gold);
+}
+
+.bottom-nav-icon {
+  font-size: 1.5rem;
+  margin-bottom: 2px;
+}
+
+.bottom-nav-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.bottom-nav .cart-link {
+  position: relative;
+}
+
+.bottom-nav .cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 18px;
+  height: 18px;
+  font-size: 0.65rem;
 }

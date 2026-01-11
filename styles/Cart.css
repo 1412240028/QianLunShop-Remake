@@ -25,6 +25,7 @@
   display: grid;
   grid-template-columns: 1fr 350px;
   gap: var(--spacing-xl);
+  align-items: start;
 }
 
 /* Empty Cart */
@@ -50,6 +51,10 @@
   color: var(--primary-black);
   text-decoration: none;
   font-weight: 600;
+}
+
+.empty-cart br + a {
+  margin-top: var(--spacing-sm);
 }
 
 /* Cart Items */
@@ -170,6 +175,12 @@
   color: var(--gold);
   border-radius: 3px;
   font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.quantity-btn:active {
+  transform: scale(0.95);
+  background: var(--secondary-black);
 }
 
 .quantity-display {

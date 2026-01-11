@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import '../styles/Navbar.css';
 
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { getCartCount } = useCart();
+  const location = useLocation();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -15,8 +17,17 @@ function Navbar() {
     setIsMobileMenuOpen(false);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isScrolled ? 'navbar--scrolled' : ''}`}>
       <div className="navbar-container">
         {/* Logo */}
         <div className="navbar-logo">
@@ -29,32 +40,32 @@ function Navbar() {
         <div className="navbar-menu">
           <ul>
             <li>
-              <Link to="/">Beranda</Link>
+              <NavLink to="/" exact activeClassName="active">Beranda</NavLink>
             </li>
             <li>
-              <Link to="/products">Produk</Link>
+              <NavLink to="/products" activeClassName="active">Produk</NavLink>
             </li>
             <li>
-              <Link to="/cart" className="cart-link">
+              <NavLink to="/cart" activeClassName="active" className="cart-link">
                 Keranjang
                 {getCartCount() > 0 && (
                   <span className="cart-count">{getCartCount()}</span>
                 )}
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/about">Tentang</Link>
+              <NavLink to="/about" activeClassName="active">Tentang</NavLink>
             </li>
             <li>
-              <Link to="/contact">Kontak</Link>
+              <NavLink to="/contact" activeClassName="active">Kontak</NavLink>
             </li>
             <li>
-              <Link to="/settings">Settings</Link>
+              <NavLink to="/settings" activeClassName="active">Settings</NavLink>
             </li>
           </ul>
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Button - Hidden on mobile, bottom nav used instead */}
         <button
           className={`mobile-menu-btn ${isMobileMenuOpen ? 'open' : ''}`}
           onClick={toggleMobileMenu}
@@ -67,28 +78,10 @@ function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - For additional items */}
       {isMobileMenuOpen && (
         <div className="mobile-menu" style={{ display: 'block' }}>
           <ul>
-            <li>
-              <Link to="/" onClick={closeMobileMenu}>
-                Beranda
-              </Link>
-            </li>
-            <li>
-              <Link to="/products" onClick={closeMobileMenu}>
-                Produk
-              </Link>
-            </li>
-            <li>
-              <Link to="/cart" onClick={closeMobileMenu} className="cart-link">
-                Keranjang
-                {getCartCount() > 0 && (
-                  <span className="cart-count">{getCartCount()}</span>
-                )}
-              </Link>
-            </li>
             <li>
               <Link to="/about" onClick={closeMobileMenu}>
                 Tentang
@@ -99,14 +92,32 @@ function Navbar() {
                 Kontak
               </Link>
             </li>
-            <li>
-              <Link to="/settings" onClick={closeMobileMenu}>
-                Settings
-              </Link>
-            </li>
           </ul>
         </div>
       )}
+
+      {/* Bottom Navigation for Mobile */}
+      <div className="bottom-nav">
+        <Link to="/" className={`bottom-nav-item ${location.pathname === '/' ? 'active' : ''}`} onClick={closeMobileMenu}>
+          <span className="bottom-nav-icon">🏠</span>
+          <span className="bottom-nav-label">Beranda</span>
+        </Link>
+        <Link to="/products" className={`bottom-nav-item ${location.pathname === '/products' ? 'active' : ''}`} onClick={closeMobileMenu}>
+          <span className="bottom-nav-icon">🔍</span>
+          <span className="bottom-nav-label">Produk</span>
+        </Link>
+        <Link to="/cart" className={`bottom-nav-item cart-link ${location.pathname === '/cart' ? 'active' : ''}`} onClick={closeMobileMenu}>
+          <span className="bottom-nav-icon">🛒</span>
+          <span className="bottom-nav-label">Keranjang</span>
+          {getCartCount() > 0 && (
+            <span className="cart-count">{getCartCount()}</span>
+          )}
+        </Link>
+        <Link to="/settings" className={`bottom-nav-item ${location.pathname === '/settings' ? 'active' : ''}`} onClick={closeMobileMenu}>
+          <span className="bottom-nav-icon">👤</span>
+          <span className="bottom-nav-label">Profile</span>
+        </Link>
+      </div>
     </nav>
   );
 }

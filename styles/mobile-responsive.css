@@ -7,38 +7,46 @@
 
 /* Ensure all interactive elements are touch-friendly (min 44x44px) */
 @media (max-width: 768px) {
-  
+
   /* ===== BASE TYPOGRAPHY FIXES ===== */
   body {
-    font-size: 16px; /* Prevent iOS zoom on input focus */
+    font-size: 16px;
+    /* Prevent iOS zoom on input focus */
     -webkit-text-size-adjust: 100%;
+    /* Add padding for bottom nav */
+    padding-bottom: 80px;
   }
 
   h1 {
-    font-size: 1.75rem; /* 28px */
+    font-size: 1.75rem;
+    /* 28px */
     line-height: 1.3;
     margin-bottom: 1rem;
   }
 
   h2 {
-    font-size: 1.5rem; /* 24px */
+    font-size: 1.5rem;
+    /* 24px */
     line-height: 1.3;
     margin-bottom: 0.875rem;
   }
 
   h3 {
-    font-size: 1.25rem; /* 20px */
+    font-size: 1.25rem;
+    /* 20px */
     line-height: 1.4;
     margin-bottom: 0.75rem;
   }
 
   h4 {
-    font-size: 1.125rem; /* 18px */
+    font-size: 1.125rem;
+    /* 18px */
     line-height: 1.4;
   }
 
   p {
-    font-size: 1rem; /* 16px */
+    font-size: 1rem;
+    /* 16px */
     line-height: 1.6;
     margin-bottom: 1rem;
   }
@@ -98,7 +106,9 @@
   }
 
   .card img {
-    height: 280px;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    height: auto;
     object-fit: cover;
   }
 
@@ -131,7 +141,8 @@
   .form-group select,
   .form-group textarea {
     min-height: 48px;
-    font-size: 16px; /* Prevent iOS zoom */
+    font-size: 16px;
+    /* Prevent iOS zoom */
     padding: 14px 16px;
     border-radius: 8px;
   }
@@ -149,7 +160,8 @@
   .navbar-container {
     padding: 0 1rem;
     display: flex;
-    justify-content: space-between; /* Logo kiri, burger kanan */
+    justify-content: space-between;
+    /* Logo kiri, burger kanan */
     align-items: center;
     height: 100%;
     max-width: 100%;
@@ -157,8 +169,10 @@
 
   .navbar-logo {
     font-size: 1.25rem;
-    flex-shrink: 0; /* Prevent logo from shrinking */
-    order: 1; /* Ensure logo stays on left */
+    flex-shrink: 0;
+    /* Prevent logo from shrinking */
+    order: 1;
+    /* Ensure logo stays on left */
   }
 
   .navbar-logo img {
@@ -173,7 +187,7 @@
 
   /* HIDE desktop menu on mobile */
   .navbar-menu {
-    display: none !important;
+    display: none;
   }
 
   /* SHOW burger button on mobile - ALWAYS ON RIGHT */
@@ -193,9 +207,12 @@
     z-index: 1001;
     position: relative;
     transition: all 0.3s ease;
-    order: 2; /* Ensure burger stays on right */
-    flex-shrink: 0; /* Prevent burger from shrinking */
-    margin-left: auto; /* Push to the right */
+    order: 2;
+    /* Ensure burger stays on right */
+    flex-shrink: 0;
+    /* Prevent burger from shrinking */
+    margin-left: auto;
+    /* Push to the right */
   }
 
   .mobile-menu-btn:hover,
@@ -252,6 +269,7 @@
       opacity: 0;
       transform: translateY(-10px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -435,13 +453,12 @@
   @keyframes slideDown {
     from {
       opacity: 0;
-      max-height: 0;
-      overflow: hidden;
+      transform: translateY(-10px);
     }
+
     to {
       opacity: 1;
-      max-height: 2000px;
-      overflow: visible;
+      transform: translateY(0);
     }
   }
 
@@ -492,8 +509,9 @@
   }
 
   .products-grid .card img {
-    height: 280px;
+    aspect-ratio: 1 / 1;
     width: 100%;
+    height: auto;
     object-fit: cover;
   }
 
@@ -729,92 +747,102 @@
     display: none;
   }
 
+  /* ===== CART PAGE MOBILE (RE-DESIGNED AS CARD) ===== */
   .cart-item {
-    grid-template-columns: 1fr;
-    padding: 1rem;
-    gap: 1rem;
+    display: flex; /* Ubah dari grid ke flex untuk kebebasan layout card */
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: 1.5rem;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-light);
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    position: relative;
   }
 
+  /* Susunan Atas: Gambar dan Detail Produk */
   .product-info {
-    flex-direction: row;
-    gap: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--gray-light);
+    display: flex;
+    flex-direction: row; /* Gambar di kiri, teks di kanan */
+    align-items: center;
+    gap: 1.25rem;
+    width: 100%;
+    text-align: left; /* Kembalikan ke kiri agar lebih natural */
   }
 
   .product-info img {
-    width: 80px;
-    height: 80px;
-    flex-shrink: 0;
+    width: 100px; /* Lebih besar agar jelas */
+    height: 100px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
   }
 
   .product-details {
+    text-align: left;
     flex: 1;
   }
 
   .product-details h3 {
-    font-size: 1.125rem;
+    font-size: 1.1rem;
     margin-bottom: 0.25rem;
   }
 
-  .product-details span {
-    font-size: 0.875rem;
-  }
-
-  .item-price,
-  .item-subtotal {
-    font-size: 1.125rem;
-    text-align: left;
+  /* Susunan Tengah: Harga & Kontrol */
+  .item-price {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 0;
+    font-size: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--gray-light);
   }
 
+  /* Tambahkan label "Harga:" sebelum angka agar informatif */
   .item-price::before {
-    content: 'Price: ';
-    font-weight: 400;
+    content: "Harga Satuan:";
+    font-size: 0.8rem;
     color: var(--gray);
-  }
-
-  .item-subtotal::before {
-    content: 'Subtotal: ';
     font-weight: 400;
-    color: var(--gray);
   }
 
   .quantity-controls {
-    justify-content: flex-start;
-    gap: 1rem;
-    padding: 0.75rem 0;
+    display: flex;
+    justify-content: center;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: var(--off-white);
+    width: 100%; /* Penuhi lebar card */
   }
 
-  .quantity-controls::before {
-    content: 'Quantity: ';
-    font-weight: 600;
-    color: var(--gray-dark);
+  /* Susunan Bawah: Subtotal */
+  .item-subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid var(--gold);
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
   }
 
-  .quantity-btn {
-    width: 44px;
-    height: 44px;
-    font-size: 1.25rem;
+  .item-subtotal::before {
+    content: "Subtotal:";
+    font-size: 0.85rem;
+    color: var(--primary-black);
   }
 
-  .quantity-display {
-    min-width: 44px;
-    font-size: 1.125rem;
-  }
-
+  /* Tombol Hapus */
   .item-actions {
-    justify-content: stretch;
+    margin-top: 0.5rem;
   }
 
   .remove-btn {
     width: 100%;
-    min-height: 48px;
-    padding: 12px 16px;
-    font-size: 1rem;
+    background: #fff; /* Ubah jadi putih dengan border merah agar tidak terlalu dominan */
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+    min-height: 44px;
   }
 
   .cart-actions {
@@ -883,8 +911,11 @@
   }
 
   .recommended-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1rem;
+    padding-bottom: 1rem;
   }
 
   .recommended-card img {
@@ -1044,9 +1075,18 @@
     width: 100%;
   }
 
+  /* ===== BOTTOM NAV MOBILE ===== */
+  .bottom-nav {
+    display: flex;
+  }
+
+  .mobile-menu-btn {
+    display: none;
+  }
+
   /* ===== TOAST NOTIFICATION MOBILE ===== */
   .toast-notification {
-    bottom: 20px;
+    bottom: 100px; /* Account for bottom nav */
     right: 20px;
     left: 20px;
     max-width: calc(100vw - 40px);
@@ -1075,7 +1115,11 @@
 
   /* ===== ACCESSIBILITY IMPROVEMENTS ===== */
   /* Larger tap targets for all interactive elements */
-  a, button, input, select, textarea {
+  a,
+  button,
+  input,
+  select,
+  textarea {
     -webkit-tap-highlight-color: rgba(212, 175, 55, 0.2);
   }
 
@@ -1162,6 +1206,7 @@
    TOUCH DEVICE SPECIFIC
    ======================================== */
 @media (hover: none) and (pointer: coarse) {
+
   /* Remove hover effects on touch devices */
   .card:hover {
     transform: none;

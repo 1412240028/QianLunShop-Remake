@@ -39,6 +39,8 @@ function Cart() {
               <h2>Your cart is empty</h2>
               <p>Start shopping to add items to your cart</p>
               <Link to="/products" className="btn btn-primary">Browse Products</Link>
+              <br />
+              <Link to="/products" className="btn btn-secondary">Browse Best Sellers</Link>
             </div>
           ) : (
             <div className="cart-container">
