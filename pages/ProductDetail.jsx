@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import useToast from '../utils/useToast';
 import '../styles/ProductDetail.css';
 
 function ProductDetail() {
@@ -9,6 +10,7 @@ function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [activeTab, setActiveTab] = useState('description');
   const { addToCart } = useCart();
+  const { showToast } = useToast();
 
   // Sample product data
   const products = [
@@ -20,6 +22,7 @@ function ProductDetail() {
       badge: 'NEW',
       rating: 5,
       reviews: 127,
+      stock: 5,
       description: 'The Apex Chronograph represents the pinnacle of horological craftsmanship. Featuring a precision Swiss movement, sapphire crystal glass, and a luxurious leather strap with dragon-scale embossing. Water-resistant to 100 meters, this timepiece combines heritage with modern engineering.',
       features: [
         'Swiss automatic movement',
@@ -31,9 +34,9 @@ function ProductDetail() {
       ],
       images: [
         '/assets/images/products/watch.png',
+        '/assets/images/products/watch2.png',
         '/assets/images/products/watch.png',
-        '/assets/images/products/watch.png',
-        '/assets/images/products/watch.png'
+        '/assets/images/products/watch2.png'
       ],
       specifications: {
         material: 'Stainless Steel & Leather',
@@ -51,6 +54,7 @@ function ProductDetail() {
       badge: 'BESTSELLER',
       rating: 5,
       reviews: 89,
+      stock: 8,
       description: 'The Sovereign Leather bag combines timeless elegance with modern functionality. Crafted from premium Italian leather with dragon embossing details.',
       features: [
         'Premium Italian leather',
@@ -79,6 +83,7 @@ function ProductDetail() {
       badge: 'SALE',
       rating: 5,
       reviews: 156,
+      stock: 12,
       description: 'The Imperial Oxford shoes feature premium leather construction with dragon motif accents.',
       features: [
         'Premium leather',
@@ -107,6 +112,7 @@ function ProductDetail() {
       badge: 'LIMITED',
       rating: 5,
       reviews: 203,
+      stock: 15,
       description: 'The Elite Cardholder wallet offers sophisticated storage for your essentials.',
       features: [
         'Premium leather',
@@ -135,6 +141,7 @@ function ProductDetail() {
       badge: 'EXCLUSIVE',
       rating: 5,
       reviews: 98,
+      stock: 3,
       description: 'The Prestige Timepiece represents the ultimate fusion of traditional craftsmanship and modern precision. This masterpiece features a Swiss quartz movement housed in a dragon-engraved stainless steel case, complemented by a sapphire crystal glass and water-resistant construction. Each timepiece is individually numbered and comes with a premium leather strap, making it not just a watch, but a statement of sophistication and heritage.',
       features: [
         'Swiss quartz movement with precision accuracy',
@@ -148,9 +155,9 @@ function ProductDetail() {
       ],
       images: [
         '/assets/images/products/watch2.png',
+        '/assets/images/products/watch.png',
         '/assets/images/products/watch2.png',
-        '/assets/images/products/watch2.png',
-        '/assets/images/products/watch2.png'
+        '/assets/images/products/watch.png'
       ],
       specifications: {
         material: 'Stainless Steel & Premium Leather',
@@ -217,13 +224,7 @@ function ProductDetail() {
       quantity: quantity
     });
 
-    // Simple toast notification
-    const toast = document.createElement('div');
-    toast.className = 'toast-notification';
-    toast.textContent = `${product.name} added to cart!`;
-    document.body.appendChild(toast);
-
-    setTimeout(() => toast.remove(), 3000);
+    showToast(`${product.name} added to cart!`, 'success');
   };
 
   if (!product) {
@@ -265,7 +266,7 @@ function ProductDetail() {
                     </span>
                   </div>
                 )}
-                <img src={product.images[selectedImage]} alt={product.name} />
+                <img src={product.images[selectedImage]} alt={product.name} loading="lazy" />
               </div>
 
               {/* Thumbnail Images */}
@@ -277,6 +278,7 @@ function ProductDetail() {
                     alt={`${product.name} ${index + 1}`}
                     className={selectedImage === index ? 'active' : ''}
                     onClick={() => setSelectedImage(index)}
+                    loading="lazy"
                   />
                 ))}
               </div>
@@ -301,6 +303,17 @@ function ProductDetail() {
               {/* Price */}
               <div className="product-price">
                 <h2>Rp {product.price.toLocaleString('id-ID')}</h2>
+              </div>
+
+              {/* Stock Indicator */}
+              <div className="stock-indicator">
+                {product.stock > 10 ? (
+                  <span className="stock-high">✓ In Stock ({product.stock})</span>
+                ) : product.stock > 0 ? (
+                  <span className="stock-low">⚠ Low Stock ({product.stock})</span>
+                ) : (
+                  <span className="stock-out">✗ Out of Stock</span>
+                )}
               </div>
 
               {/* Description */}
@@ -442,7 +455,77 @@ function ProductDetail() {
               {activeTab === 'reviews' && (
                 <div className="tab-pane">
                   <h3>Customer Reviews</h3>
-                  <p>Reviews functionality will be added in Phase 3</p>
+                  <div className="reviews-section">
+                    {/* Overall Rating */}
+                    <div className="overall-rating">
+                      <div className="rating-summary">
+                        <div className="rating-score">
+                          <span className="score">4.8</span>
+                          <span className="stars">⭐⭐⭐⭐⭐</span>
+                          <span className="reviews-count">({product.reviews} reviews)</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Individual Reviews */}
+                    <div className="reviews-list">
+                      {/* Review 1 */}
+                      <div className="review-item">
+                        <div className="review-header">
+                          <div className="reviewer-info">
+                            <span className="reviewer-name">Ahmad Rahman</span>
+                            <span className="review-date">2 weeks ago</span>
+                          </div>
+                          <div className="review-rating">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <div className="review-content">
+                          <p>Absolutely stunning craftsmanship! The attention to detail is remarkable. The dragon embossing is exquisite and the quality of materials is top-notch. Highly recommend for anyone looking for luxury accessories.</p>
+                        </div>
+                      </div>
+
+                      {/* Review 2 */}
+                      <div className="review-item">
+                        <div className="review-header">
+                          <div className="reviewer-info">
+                            <span className="reviewer-name">Sarah Chen</span>
+                            <span className="review-date">1 month ago</span>
+                          </div>
+                          <div className="review-rating">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <div className="review-content">
+                          <p>Exceptional quality and design. The heritage-inspired elements combined with modern luxury create a perfect balance. Fast shipping and excellent packaging. Will definitely purchase again.</p>
+                        </div>
+                      </div>
+
+                      {/* Review 3 */}
+                      <div className="review-item">
+                        <div className="review-header">
+                          <div className="reviewer-info">
+                            <span className="reviewer-name">Budi Santoso</span>
+                            <span className="review-date">6 weeks ago</span>
+                          </div>
+                          <div className="review-rating">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <div className="review-content">
+                          <p>Impressed by the brand's commitment to quality and heritage. The product exceeded my expectations. The customer service was also outstanding. A true luxury experience.</p>
+                        </div>
+                      </div>
+
+                      {/* Review 4 */}
+                      <div className="review-item">
+                        <div className="review-header">
+                          <div className="reviewer-info">
+                            <span className="reviewer-name">Maya Putri</span>
+                            <span className="review-date">2 months ago</span>
+                          </div>
+                          <div className="review-rating">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <div className="review-content">
+                          <p>Beautiful design that captures the essence of luxury. The craftsmanship is impeccable and the materials feel premium. Perfect for special occasions or as a statement piece.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -459,7 +542,7 @@ function ProductDetail() {
           <div className="grid grid-3">
             {relatedProducts.map((item) => (
               <div key={item.id} className="card">
-                <img src={item.image} alt={item.name} />
+                <img src={item.image} alt={item.name} loading="lazy" />
                 <div className="card-content">
                   <h3>{item.name}</h3>
                   <div className="product-rating">

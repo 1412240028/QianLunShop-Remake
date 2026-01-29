@@ -1,7 +1,70 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, memo } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import '../styles/Products.css';
+
+// Memoized Product Card Component
+const ProductCard = memo(({ product, onAddToCart }) => (
+  <div className="card">
+    {/* Product Badge */}
+    {product.badge && (
+      <div className="product-badge">
+        <span className={`badge badge-${product.badge.toLowerCase()}`}>
+          {product.badge}
+        </span>
+      </div>
+    )}
+
+    {/* Product Image */}
+    <img src={product.image} alt={product.name} loading="lazy" />
+
+    {/* Product Info */}
+    <div className="card-content">
+      <span className="product-category">
+        {product.category === 'watch' ? '⌚ Watch' :
+         product.category === 'bag' ? '👜 Bag' :
+         product.category === 'shoes' ? '👞 Shoes' : '👛 Wallet'}
+      </span>
+      <h3 className="product-name">{product.name}</h3>
+
+      {/* Rating */}
+      <div className="product-rating">
+        <span>⭐⭐⭐⭐⭐</span>
+        <span>({product.reviews} reviews)</span>
+      </div>
+
+      {/* Price */}
+      <p className="product-price">Rp {product.price.toLocaleString('id-ID')}</p>
+
+      {/* Stock Indicator */}
+      <div className="stock-indicator">
+        {product.stock > 10 ? (
+          <span className="stock-high">✓ In Stock ({product.stock})</span>
+        ) : product.stock > 0 ? (
+          <span className="stock-low">⚠ Low Stock ({product.stock})</span>
+        ) : (
+          <span className="stock-out">✗ Out of Stock</span>
+        )}
+      </div>
+
+      {/* Actions */}
+      <div className="product-actions">
+        <button
+          className="btn btn-secondary"
+          onClick={() => onAddToCart(product)}
+        >
+          Add to Cart
+        </button>
+        <Link
+          to={`/products/${product.id}`}
+          className="btn btn-primary"
+        >
+          View Details
+        </Link>
+      </div>
+    </div>
+  </div>
+));
 
 function Products() {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -9,7 +72,19 @@ function Products() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('default');
   const [isFilterCollapsed, setIsFilterCollapsed] = useState(true); // Collapsed by default on mobile
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const itemsPerPage = 6; // Show 6 products per page
   const { addToCart } = useCart();
+  const [searchParams] = useSearchParams();
+
+  // Handle search from URL params
+  useEffect(() => {
+    const searchParam = searchParams.get('search');
+    if (searchParam) {
+      setSearchQuery(searchParam);
+    }
+  }, [searchParams]);
 
   // Product data
   const products = [
@@ -21,7 +96,8 @@ function Products() {
       image: '/assets/images/products/watch.png',
       badge: 'NEW',
       rating: 5,
-      reviews: 127
+      reviews: 127,
+      stock: 5
     },
     {
       id: 2,
@@ -31,7 +107,8 @@ function Products() {
       image: '/assets/images/products/bag.png',
       badge: 'BESTSELLER',
       rating: 5,
-      reviews: 89
+      reviews: 89,
+      stock: 8
     },
     {
       id: 3,
@@ -41,7 +118,8 @@ function Products() {
       image: '/assets/images/products/shoes.png',
       badge: 'SALE',
       rating: 5,
-      reviews: 156
+      reviews: 156,
+      stock: 12
     },
     {
       id: 4,
@@ -51,7 +129,8 @@ function Products() {
       image: '/assets/images/products/wallet.png',
       badge: 'LIMITED',
       rating: 5,
-      reviews: 203
+      reviews: 203,
+      stock: 15
     },
     {
       id: 5,
@@ -61,7 +140,8 @@ function Products() {
       image: '/assets/images/products/watch2.png',
       badge: 'EXCLUSIVE',
       rating: 5,
-      reviews: 98
+      reviews: 98,
+      stock: 3
     }
   ];
 
@@ -92,6 +172,21 @@ function Products() {
         return 0;
     }
   });
+
+  // Pagination logic
+  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = sortedProducts.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+    setIsLoading(true);
+    // Simulate loading delay
+    const timer = setTimeout(() => setIsLoading(false), 300);
+    return () => clearTimeout(timer);
+  }, [selectedCategory, priceRange, searchQuery, sortBy]);
 
   const handleAddToCart = (product) => {
     addToCart({
@@ -268,58 +363,53 @@ function Products() {
             </select>
           </div>
 
-          <div className="products-grid">
-            {sortedProducts.map((product) => (
-              <div key={product.id} className="card">
-                {/* Product Badge */}
-                {product.badge && (
-                  <div className="product-badge">
-                    <span className={`badge badge-${product.badge.toLowerCase()}`}>
-                      {product.badge}
-                    </span>
-                  </div>
-                )}
+          {isLoading ? (
+            <div className="loading-spinner">
+              <div className="spinner"></div>
+              <p>Loading products...</p>
+            </div>
+          ) : (
+            <div className="products-grid">
+              {currentProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onAddToCart={handleAddToCart}
+                />
+              ))}
+            </div>
+          )}
 
-                {/* Product Image */}
-                <img src={product.image} alt={product.name} />
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button
+                className="pagination-btn"
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
 
-                {/* Product Info */}
-                <div className="card-content">
-                  <span className="product-category">
-                    {product.category === 'watch' ? '⌚ Watch' :
-                     product.category === 'bag' ? '👜 Bag' :
-                     product.category === 'shoes' ? '👞 Shoes' : '👛 Wallet'}
-                  </span>
-                  <h3 className="product-name">{product.name}</h3>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  className={`pagination-btn ${currentPage === page ? 'active' : ''}`}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </button>
+              ))}
 
-                  {/* Rating */}
-                  <div className="product-rating">
-                    <span>⭐⭐⭐⭐⭐</span>
-                    <span>({product.reviews} reviews)</span>
-                  </div>
-
-                  {/* Price */}
-                  <p className="product-price">Rp {product.price.toLocaleString('id-ID')}</p>
-
-                  {/* Actions */}
-                  <div className="product-actions">
-                    <button
-                      className="btn btn-secondary"
-                      onClick={() => handleAddToCart(product)}
-                    >
-                      Add to Cart
-                    </button>
-                    <Link
-                      to={`/products/${product.id}`}
-                      className="btn btn-primary"
-                    >
-                      View Details
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+              <button
+                className="pagination-btn"
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
 
           {sortedProducts.length === 0 && (
             <div className="no-products">

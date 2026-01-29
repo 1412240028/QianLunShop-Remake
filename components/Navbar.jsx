@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { useAuth } from '../contexts/AuthContext';
 import '../styles/Navbar.css';
 
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { getCartCount } = useCart();
+  const { user, logout, isAuthenticated } = useAuth();
   const location = useLocation();
 
   const toggleMobileMenu = () => {
@@ -64,6 +66,26 @@ function Navbar() {
             </li>
           </ul>
         </div>
+
+        {/* User/Auth Links */}
+        {isAuthenticated ? (
+          <div className="navbar-user">
+            <div className="user-menu">
+              <Link to="/profile" className="user-info">
+                <img src={user.avatar} alt={user.name} className="user-avatar" />
+                <span>{user.name}</span>
+              </Link>
+              <button onClick={logout} className="btn btn-secondary logout-btn">
+                Logout
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="navbar-auth">
+            <Link to="/login" className="btn btn-secondary">Login</Link>
+            <Link to="/register" className="btn btn-primary">Sign Up</Link>
+          </div>
+        )}
 
         {/* Mobile Menu Button - Hidden on mobile, bottom nav used instead */}
         <button

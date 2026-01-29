@@ -1,17 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
 import { useOrderHistory } from '../contexts/OrderHistoryContext';
 import { usePreferences } from '../contexts/UserPreferencesContext';
 import localStorage from '../utils/localStorage';
 import ConfirmationModal from '../components/ConfirmationModal';
+import useToast from '../utils/useToast';
+
+// Reducer for confirmation modal state
+const modalReducer = (state, action) => {
+  switch (action.type) {
+    case 'OPEN':
+      return {
+        isOpen: true,
+        title: action.payload.title,
+        message: action.payload.message,
+        onConfirm: action.payload.onConfirm,
+        type: action.payload.type || 'warning',
+        confirmText: action.payload.confirmText || 'Confirm',
+        cancelText: action.payload.cancelText || 'Cancel'
+      };
+    case 'CLOSE':
+      return {
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: null,
+        type: 'warning',
+        confirmText: 'Confirm',
+        cancelText: 'Cancel'
+      };
+    default:
+      return state;
+  }
+};
 
 function Settings() {
   const [storageInfo, setStorageInfo] = useState(null);
   const [activeTab, setActiveTab] = useState('general');
   const [pendingPreferences, setPendingPreferences] = useState(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [confirmModal, setConfirmModal] = useState({
+  const [confirmModal, dispatchModal] = useReducer(modalReducer, {
     isOpen: false,
     title: '',
     message: '',
@@ -25,6 +54,7 @@ function Settings() {
   const { clearWishlist, items: wishlistItems } = useWishlist();
   const { clearOrderHistory, orders, getTotalSpent } = useOrderHistory();
   const { preferences, updatePreference, resetPreferences, clearUserInfo } = usePreferences();
+  const { showToast } = useToast();
 
   useEffect(() => {
     updateStorageInfo();
@@ -42,22 +72,14 @@ function Settings() {
   };
 
   const showConfirmation = (config) => {
-    setConfirmModal({
-      isOpen: true,
-      ...config
+    dispatchModal({
+      type: 'OPEN',
+      payload: config
     });
   };
 
   const closeConfirmation = () => {
-    setConfirmModal({
-      isOpen: false,
-      title: '',
-      message: '',
-      onConfirm: null,
-      type: 'warning',
-      confirmText: 'Confirm',
-      cancelText: 'Cancel'
-    });
+    dispatchModal({ type: 'CLOSE' });
   };
 
   const handleClearCart = () => {
@@ -276,23 +298,7 @@ function Settings() {
     });
   };
 
-  const showToast = (message, type = 'success') => {
-    const toast = document.createElement('div');
-    toast.className = 'toast-notification';
-    toast.textContent = message;
 
-    // Add type-specific styling
-    if (type === 'error') {
-      toast.style.background = '#e74c3c';
-      toast.style.color = 'white';
-    } else if (type === 'success') {
-      toast.style.background = 'var(--gold)';
-      toast.style.color = 'var(--primary-black)';
-    }
-
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
-  };
 
   return (
     <div className="page-wrapper">

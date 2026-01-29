@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import useToast from '../utils/useToast';
 import '../styles/Cart.css';
 
 function Cart() {
@@ -15,10 +16,12 @@ function Cart() {
     getFinalTotal
   } = useCart();
 
-  const subtotal = getCartTotal();
-  const shipping = getShippingCost();
-  const tax = getTax();
-  const total = getFinalTotal();
+  const { showToast } = useToast();
+
+  const subtotal = getCartTotal ? getCartTotal() : 0;
+  const shipping = getShippingCost ? getShippingCost() : 0;
+  const tax = getTax ? getTax() : 0;
+  const total = getFinalTotal ? getFinalTotal() : 0;
 
   return (
     <div className="page-wrapper">
@@ -104,12 +107,7 @@ function Cart() {
                         className="remove-btn"
                         onClick={() => {
                           removeFromCart(item.id);
-                          // Simple toast notification
-                          const toast = document.createElement('div');
-                          toast.className = 'toast-notification';
-                          toast.textContent = `${item.name} removed from cart!`;
-                          document.body.appendChild(toast);
-                          setTimeout(() => toast.remove(), 3000);
+                          showToast(`${item.name} removed from cart!`, 'success');
                         }}
                         aria-label="Remove item from cart"
                       >
@@ -125,12 +123,7 @@ function Cart() {
                   <button
                     onClick={() => {
                       clearCart();
-                      // Simple toast notification
-                      const toast = document.createElement('div');
-                      toast.className = 'toast-notification';
-                      toast.textContent = 'Cart cleared!';
-                      document.body.appendChild(toast);
-                      setTimeout(() => toast.remove(), 3000);
+                      showToast('Cart cleared!', 'success');
                     }}
                     className="btn btn-secondary"
                   >
@@ -179,9 +172,9 @@ function Cart() {
                 )}
 
                 {/* Checkout Button */}
-                <button className="checkout-btn btn btn-primary">
+                <Link to="/checkout" className="checkout-btn btn btn-primary">
                   Proceed to Checkout
-                </button>
+                </Link>
 
                 {/* Payment Methods */}
                 <div className="payment-methods">
